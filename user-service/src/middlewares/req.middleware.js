@@ -13,4 +13,6 @@ const regLogger = (req, res, next) =>{
     next();
 }
 
-export { regLogger};
+module.exports = {
+    reqLogger: regLogger
+}
