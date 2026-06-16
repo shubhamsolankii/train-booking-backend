@@ -22,9 +22,12 @@ const config = {
   REFRESH_TOKEN_EXP_SEC: Number(process.env.REFRESH_TOKEN_EXP_SEC || 604800),
   REDIS_USER_TTL: Number(process.env.REDIS_USER_TTL || 86400),
 
-
-  MAIL_SEND: process.env.MAIL_SEND,
-  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+  MAIL_HOST: process.env.MAIL_HOST,
+  MAIL_PORT: Number(process.env.MAIL_PORT) || 587,
+  MAIL_SECURE: process.env.MAIL_SECURE || 'false',
+  MAIL_USER: process.env.MAIL_USER,
+  MAIL_PASSWORD: process.env.MAIL_PASSWORD,
+  MAIL_FROM: process.env.MAIL_FROM,
 
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
@@ -33,15 +36,15 @@ const config = {
 }
 
 
-if (!config.GOOGLE_CLIENT_ID) {
-  throw new Error("GOOGLE_CLIENT_ID environment variable is required");
-}
+// if (!config.GOOGLE_CLIENT_ID) {
+//   throw new Error("GOOGLE_CLIENT_ID environment variable is required");
+// }
 
-if (!config.SENDGRID_API_KEY) {
-  throw new Error('SENDGRID_API_KEY missing');
-}
+// if (!config.SENDGRID_API_KEY) {
+//   throw new Error('SENDGRID_API_KEY missing');
+// }
 
-if (!config.MAIL_SEND) {
-  throw new Error('MAIL_SEND missing');
-}
+// if (!config.MAIL_SEND) {
+//   throw new Error('MAIL_SEND missing');
+// }
 module.exports = { config };
