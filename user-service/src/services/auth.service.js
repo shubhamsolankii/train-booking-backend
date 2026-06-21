@@ -8,6 +8,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { config } = require("../config");
 const {OAuth2Client} = require("google-auth-library");
+const logger = require("../config/logger");
+const notificationProducer = require("../kafa/producer/notification.producer");
 
 const client = new OAuth2Client(config.GOOGLE_CLIENT_ID);    
 
@@ -25,7 +27,8 @@ exports.sendOTP = async(firstName, lastName, email, password) =>{
     const meta = { firstName, lastName, email, hashedPassword };
 
     const {otp , otpSessionId} = await generateAndStoreOtp(meta);
-
+    await notificationProducer.sendOtpEmail(email, otp, (config.OTP_TTL) / 60 );
+    logger.info(`Generated OTP ${otp} for email ${email} with session ID ${otpSessionId}`);
     // Return OTP in response instead of sending via email
     return {otpSessionId, otp};
 
@@ -46,6 +49,7 @@ exports.verifyOTP = async(otpSessionId, otp) =>{
         }
     })
 
+    await notificationProducer.sendWelcomeEmail(meta.email, meta.firstName);    
     return user;
 }
 
